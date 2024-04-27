@@ -24,8 +24,10 @@
 		"postinstall": "husky install",
 		"next:build": "yarn workspace @scytale/nextjs build",
 		"next:lint": "yarn workspace @scytale/nextjs lint",
+		"next:format": "yarn workspace @scytale/nextjs format",
 		"precommit": "lint-staged",
 		"start": "yarn workspace @scytale/nextjs dev",
+		"next:check-types": "yarn workspace @scytale/nextjs check-types",
 		"test": "yarn hardhat:test",
 		"verify": "yarn workspace @scytale/hardhat verify"
 	},
