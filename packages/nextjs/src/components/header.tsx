@@ -10,6 +10,8 @@ import {
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import Link from "next/link"
 
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
 import { ConnectButton } from "@rainbow-me/rainbowkit"
 import GlobeAltIcon from "@heroicons/react/24/outline/GlobeAltIcon"
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon"
@@ -112,10 +114,18 @@ export default function Header() {
       <div className="flex flex-row justify-between items-center max-w-7xl md:px-12 px-0 py-4 w-full">
         <NavMenuDesktop />
         <NavMenuMobile />
-        <div className="flex gap-2 flex-row-reverse items-center justify-center">
-          <Button variant="ghost" className="py-5 px-2">
-            <GlobeAltIcon className="h-8 w-8" />
-          </Button>
+        <div className="flex gap-4 flex-row-reverse items-center justify-center">
+          <Sheet>
+            <SheetTrigger>
+              <GlobeAltIcon className="h-8 w-8" />
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Available Nodes</SheetTitle>
+                <SheetDescription></SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
           <ConnectButton
             accountStatus={{
               smallScreen: "avatar",
