@@ -2362,6 +2362,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scytale/backend@workspace:packages/backend":
+  version: 0.0.0-use.local
+  resolution: "@scytale/backend@workspace:packages/backend"
+  languageName: unknown
+  linkType: soft
+
 "@scytale/hardhat@workspace:packages/hardhat":
   version: 0.0.0-use.local
   resolution: "@scytale/hardhat@workspace:packages/hardhat"
