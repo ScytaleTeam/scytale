@@ -2236,9 +2236,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@se-2/hardhat@workspace:packages/hardhat":
+"@scytale/hardhat@workspace:packages/hardhat":
   version: 0.0.0-use.local
-  resolution: "@se-2/hardhat@workspace:packages/hardhat"
+  resolution: "@scytale/hardhat@workspace:packages/hardhat"
   dependencies:
     "@ethersproject/abi": ~5.7.0
     "@ethersproject/providers": ~5.7.1
@@ -2276,9 +2276,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@se-2/nextjs@workspace:packages/nextjs":
+"@scytale/nextjs@workspace:packages/nextjs":
   version: 0.0.0-use.local
-  resolution: "@se-2/nextjs@workspace:packages/nextjs"
+  resolution: "@scytale/nextjs@workspace:packages/nextjs"
   dependencies:
     "@heroicons/react": ~2.0.11
     "@rainbow-me/rainbowkit": ~2.0.2
@@ -12811,9 +12811,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"se-2@workspace:.":
+"scytale@workspace:.":
   version: 0.0.0-use.local
-  resolution: "se-2@workspace:."
+  resolution: "scytale@workspace:."
   dependencies:
     husky: ~8.0.3
     lint-staged: ~13.2.2
