@@ -23,15 +23,11 @@
 		"hardhat:test": "yarn workspace @scytale/hardhat test",
 		"postinstall": "husky install",
 		"next:build": "yarn workspace @scytale/nextjs build",
-		"next:check-types": "yarn workspace @scytale/nextjs check-types",
-		"next:format": "yarn workspace @scytale/nextjs format",
 		"next:lint": "yarn workspace @scytale/nextjs lint",
 		"precommit": "lint-staged",
 		"prepare": "install-self-peers -- --ignore-scripts",
 		"start": "yarn workspace @scytale/nextjs dev",
 		"test": "yarn hardhat:test",
-		"vercel": "yarn workspace @scytale/nextjs vercel",
-		"vercel:yolo": "yarn workspace @scytale/nextjs vercel:yolo",
 		"verify": "yarn workspace @scytale/hardhat verify"
 	},
 	"resolutions": {
