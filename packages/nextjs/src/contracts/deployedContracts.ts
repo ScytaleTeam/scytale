@@ -1,4 +1,4 @@
-import { GenericContractsDeclaration } from "@/lib/utils";
+import { GenericContractsDeclaration } from "@/lib/utils"
 
 const deployedContracts = {
   31337: {
@@ -146,6 +146,6 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
   },
-} as const;
+} as const
 
-export default deployedContracts satisfies GenericContractsDeclaration;
+export default deployedContracts satisfies GenericContractsDeclaration

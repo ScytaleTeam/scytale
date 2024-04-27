@@ -1,16 +1,16 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { cn } from "@/lib/utils"
+import Image from "next/image"
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+} from "@/components/ui/navigation-menu"
 
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-import Link from "next/link";
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
+import Link from "next/link"
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "@rainbow-me/rainbowkit"
 
 export const Logo = ({ className }: { className?: string }) => {
   return (
@@ -19,8 +19,8 @@ export const Logo = ({ className }: { className?: string }) => {
         <Image src="/logo.png" alt="logo.png" fill className={cn(className, "invert")} />
       </a>
     </div>
-  );
-};
+  )
+}
 
 export const NavigationItems = [
   {
@@ -33,7 +33,7 @@ export const NavigationItems = [
     icon: null,
     href: "/node-fe",
   },
-];
+]
 
 export default function Header() {
   return (
@@ -66,5 +66,5 @@ export default function Header() {
         />
       </div>
     </div>
-  );
+  )
 }
