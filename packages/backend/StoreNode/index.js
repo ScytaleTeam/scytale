@@ -81,10 +81,18 @@ async function initializeEthers() {
     const signerAddress = await signer.getAddress();
     try {
         const scytale = new ethers.Contract(chainConfig.scytaleAddress, scytaleArtifact.abi, signer);
-
+        
+        let isStoreNodeExists;
+        try {
         const storeNode = await scytale.storeNodes(signer.address);
+        console.log(storeNode.stakeBalance);
+        isStoreNodeExists = storeNode.stakeBalance != 0;
+        } catch(e) {
+            isStoreNodeExists = false;
+        }
 
-        if(storeNode.stakeBalance == 0) {
+
+        if(!isStoreNodeExists) {
             await scytale.updateNode(messageRelayAPI, DEFAULT_PRICE, {value: STAKE_AMOUNT});
             console.log("Node initialized");
         }
@@ -97,7 +105,7 @@ async function initializeEthers() {
                     const fileName = messageHash.toString().toLowerCase().substring(2);
                     const data = fs.readFileSync(`${folderName}/${fileName}`, 'utf8');
                     const apiEndpoint = `${process.env.IP_ADDRESS}/getMessage?messageHash=${fileName}`;
-
+                    
                     await scytale.acceptMessage(messageHash, apiEndpoint);
                     console.log("Success: ", messageHash);
                 }
