@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.25;
+pragma solidity ^0.8.19;
 
 
 contract Scytale {
@@ -13,6 +13,7 @@ contract Scytale {
     uint public constant FREE_RIDER_ALERT_MIN_TIME = 10 minutes;
 
     event MessageBroadcasted(address indexed storeNodeAddress, bytes32 indexed messageHash);
+    event AcceptedMessage(address indexed sender, bytes32 indexed messageHash, string indexed receiverKey);
 
     mapping(address => string) public rsaKeys;
     address public alertVerifierAddress;
@@ -154,6 +155,8 @@ function updateNode(string calldata messageUrl, uint price) public payable {
         message.dataUrl = _dataUrl;
         message.endTime = block.timestamp + message.storeTime; //maybe optimize
         storeNodes[msg.sender].activeStores++;
+        
+        emit AcceptedMessage(message.senderAddress, _messageHash, message.receiverPublicKey);
     }
 
     function changeMessageUrl(bytes32 _messageHash, string calldata _dataUrl) public {

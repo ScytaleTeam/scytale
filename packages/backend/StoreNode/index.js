@@ -59,26 +59,44 @@ async function setupSigner() {
     let signer = new ethers.Wallet(process.env.PRIVATE_KEY);
     signer = signer.connect(provider);
     console.log("Signer address: ", await signer.getAddress());
+    globalSigner = signer;
     return signer;
 }
 
 
 async function initializeEthers() {
     const signer = await setupSigner();
+    const signerAddress = await signer.getAddress();
     try {
         const scytale = new ethers.Contract(chainConfig.scytaleAddress, scytaleArtifact.abi, signer);
-
-        vrf.on("RandomRequested", async (value) => {
+        scytale.on("MessageBroadcasted", async (storeNodeAddress, messageHash) => {
             try {
-                console.log("Random requested: ", value);
-                let randValue = Math.floor(Math.random() * 100000);
-                await vrf.submitRandom(value, randValue);
-                console.log("successful on: ", value);
-            } catch (e) {
+                if (signerAddress.toLowerCase() == storeNodeAddress.toString().toLowerCase()) {
+                    console.log("Received Broadcast: ", storeNodeAddress, messageHash);
+                    const fileName = messageHash.toString().toLowerCase().substring(2);
+                    const data = fs.readFileSync(`${folderName}/${fileName}`, 'utf8');
+                    const apiEndpoint = `${process.env.IP_ADDRESS}/getMessage?messageHash=${fileName}`;
 
+                    await scytale.acceptMessage(messageHash, apiEndpoint);
+                    console.log("Success: ", messageHash);
+                }
+
+            } catch (e) {
+                console.error("Error:" ,e.message);
             }
 
-        })
+        });
+
+                //ADMIN
+                app.post("/depositStake", async (req, res) => {
+                    if (req.body.admin != process.env.ADMIN_KEY) return res.status(401).json("No authorization!");
+                    console.log(await signer.provider.getBalance(signerAddress));
+                    const reciept = await scytale.depositNodeStake({value: ethers.parseEther("0.1")});
+                    console.log(reciept);
+
+                    res.status(200).json("Success!");
+                });
+
 
 
     } catch (e) {
@@ -87,6 +105,9 @@ async function initializeEthers() {
 }
 
 initializeEthers();
+
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
