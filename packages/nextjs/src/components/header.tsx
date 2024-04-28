@@ -81,17 +81,17 @@ const NavMenuMobile = () => {
         </button>
         <Logo className="w-24 h-6 top-1" />
       </div>
-      <div className="relative h-0 top-5">
+      <div className="relative h-0 top-4 -left-3">
         {isMenuOpen && (
           <NavigationMenu className="absolute  divide-x-0" orientation="vertical">
-            <NavigationMenuList className="flex flex-col w-screen items-start border-b-2 divide-x-0 divide-y-2 px-4">
+            <NavigationMenuList className="flex flex-col w-screen items-start border-b-2 divide-x-0 divide-y-2 px-4 bg-black">
               {NavigationItems.map(item => (
                 <NavigationMenuItem key={item.title} className="w-full ml-0">
                   <Link href={item.href} legacyBehavior passHref>
                     <NavigationMenuLink
                       className={cn(
                         navigationMenuTriggerStyle(),
-                        "text-xl text-gray-400 bg-transparent tracking-widest w-full items-center justify-center h-full",
+                        "text-xl text-gray-400 tracking-widest w-full items-center justify-center h-full",
                       )}
                     >
                       {item.icon}
@@ -111,7 +111,7 @@ const NavMenuMobile = () => {
 export default function Header() {
   return (
     <div className="flex flex-row justify-center items-center border-b fixed w-full z-20 bg-black">
-      <div className="flex flex-row justify-between items-center max-w-7xl md:px-12 px-0 py-4 w-full">
+      <div className="flex flex-row justify-between items-center max-w-7xl md:px-12 px-2 py-4 w-full">
         <NavMenuDesktop />
         <NavMenuMobile />
         <div className="flex gap-4 flex-row-reverse items-center justify-center">
