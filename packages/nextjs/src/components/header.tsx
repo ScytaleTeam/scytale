@@ -81,7 +81,7 @@ const NavMenuMobile = () => {
         </button>
         <Logo className="w-24 h-6 top-1" />
       </div>
-      <div className="relative h-0 top-5 -left-3">
+      <div className="relative h-0 top-4 -left-3">
         {isMenuOpen && (
           <NavigationMenu className="absolute  divide-x-0" orientation="vertical">
             <NavigationMenuList className="flex flex-col w-screen items-start border-b-2 divide-x-0 divide-y-2 px-4 bg-black">
