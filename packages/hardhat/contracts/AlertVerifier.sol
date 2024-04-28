@@ -115,14 +115,18 @@ function setVRFAddress(address _vrfAddress) external onlyOwner{
     require(EnumerableSet.contains(activeVerifiers, msgSender), "not verifier");
     EnumerableSet.remove(activeVerifiers, msgSender);
     activeVerifierInfo[msgSender].activenessRequest = false;
+    uint balance = activeVerifierInfo[msgSender].balance;
+    activeVerifierInfo[msgSender].balance = 0;
+    payable(msgSender).send(balance);
   }
 
   function checkStopBeingVerifierAndExecute(address verifierAddress) internal {
-    ActiveVerifier memory verifier = activeVerifierInfo[verifierAddress];
+    ActiveVerifier storage verifier = activeVerifierInfo[verifierAddress];
     if (verifier.activenessRequest == false) {
       if (verifier.balance > 0 && verifier.activeVerificationCount == 0) {
+        uint balance = verifier.balance;
         verifier.balance = 0;
-        payable(verifierAddress).send(verifier.balance);
+        payable(verifierAddress).send(balance);
       }
     }
   }

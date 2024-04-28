@@ -5,11 +5,11 @@ pragma solidity ^0.8.25;
 contract Scytale {
 
 
-    uint public constant STAKE_AMOUNT = 1 ether;
-    uint public constant MIN_STAKE_AMOUNT = 0.5 ether;
+    uint public constant STAKE_AMOUNT = 0.1 ether;
+    uint public constant MIN_STAKE_AMOUNT = 0.05 ether;
 
-    uint public constant FREE_RIDER_ALERT_DEPOSIT = 0.1 ether;
-    uint public constant FREE_RIDER_SLASH_AMOUNT = 0.1 ether;
+    uint public constant FREE_RIDER_ALERT_DEPOSIT = 0.01 ether;
+    uint public constant FREE_RIDER_SLASH_AMOUNT = 0.01 ether;
     uint public constant FREE_RIDER_ALERT_MIN_TIME = 10 minutes;
 
 
@@ -211,7 +211,10 @@ function updateNode(string calldata messageUrl, uint price) public payable {
         slashPool += message.reward *4/5;
         balances[alert.alerter] += FREE_RIDER_ALERT_DEPOSIT + message.reward * 1/5; //if not correct, slash alerter by not giving back deposit
         message.reward = 0;
+        
         }
+        alerts[id].isFreeRider = result;
+        alerts[id].isFinished = true;
         message.isAlerted = false;
         
     }
