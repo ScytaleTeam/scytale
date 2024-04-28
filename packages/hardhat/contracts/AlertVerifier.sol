@@ -6,11 +6,13 @@ import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import "contracts/MockVRFConsumerInterface.sol";
 
 contract AlertVerifier is MockVRFConsumerInterface {
-  event VerificationTask(address indexed verifier, uint256 requestId);
+  event VerificationTask(address indexed verifier, uint256 indexed requestId);
+  event AnswerGiven(address indexed verifier, uint256 indexed id);
 
   Scytale scytaleContract;
   address public scytaleContractAddress;
   address public owner;
+  
 
     VRF vrf = VRF(address(0)); //change to vrf
     mapping(uint256 => uint256) chainlinkRequestIdToRequestId;
@@ -180,6 +182,7 @@ external payable onlyContract {
       ++requests[requestId].noCount;
       requests[requestId].selectedVerifiers[index].answer = Answer.HARMED;
     }
+    emit AnswerGiven(msgSender, index);
   }
 
 

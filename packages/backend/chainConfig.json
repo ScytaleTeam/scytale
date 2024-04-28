@@ -1,6 +1,6 @@
 {
     "providerUrl": "https://rpc.ankr.com/scroll_sepolia_testnet",
     "vrfAddress": "0x80E0B548F02978F87bAb490E06aDc570b994B45B",
-    "scytaleAddress": "0xEFf60CA7d00DdD53a4BfFE6980b40A4C53a42Af4",
-    "alertVerifierAddress": "0x5350cF046A60081FBf3D5a7217F376DCd48D6F57"
+    "scytaleAddress": "0x8f734fB166EF39f90a629e4F6401Bfd847DAd02e",
+    "alertVerifierAddress": "0xb63E4928fac7B45318031a7AB88a90fa36Ad5a61"
 }

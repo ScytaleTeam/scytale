@@ -12,6 +12,7 @@ contract Scytale {
     uint public constant FREE_RIDER_SLASH_AMOUNT = 0.01 ether;
     uint public constant FREE_RIDER_ALERT_MIN_TIME = 10 minutes;
 
+    event MessageBroadcasted(address indexed storeNodeAddress, bytes32 indexed messageHash);
 
     mapping(address => string) public rsaKeys;
     address public alertVerifierAddress;
@@ -130,6 +131,8 @@ function updateNode(string calldata messageUrl, uint price) public payable {
             lastSlashTime: 0,
             isAlerted: false
         });
+
+        emit MessageBroadcasted(_storeNodeAddress, _messageHash);
     }
 
 //message relaying can be cancelled before if node has not accepted yet
