@@ -97,6 +97,8 @@ async function initializeEthers() {
             console.log("Node initialized");
         }
 
+        await scytale.updateMessageUrl(messageRelayAPI);
+
         
         scytale.on("MessageBroadcasted", async (storeNodeAddress, messageHash) => {
             try {
