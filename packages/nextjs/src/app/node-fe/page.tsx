@@ -5,7 +5,7 @@ import MiddleCard from "./components/middlecard";
 
 const Page: React.FC = () => {
   return (
-    <div className="container mx-auto mt-20 px-4">
+    <div className="container mx-auto justify-center items-center mt-20 px-4">
       <div className="text-xl font-bold text-white mt-8 ">My Node</div>
 
       <div className="mt-4 ">
