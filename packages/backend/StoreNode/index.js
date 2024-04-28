@@ -71,12 +71,25 @@ async function setupSigner() {
     return signer;
 }
 
+const STAKE_AMOUNT = ethers.parseEther("0.1");
+const DEFAULT_PRICE = ethers.parseEther("0.001");
+
+const messageRelayAPI = `${process.env.IP_ADDRESS}/postMessage`
 
 async function initializeEthers() {
     const signer = await setupSigner();
     const signerAddress = await signer.getAddress();
     try {
         const scytale = new ethers.Contract(chainConfig.scytaleAddress, scytaleArtifact.abi, signer);
+
+        const storeNode = await scytale.storeNodes(signer.address);
+
+        if(storeNode.stakeBalance == 0) {
+            await scytale.updateNode(messageRelayAPI, DEFAULT_PRICE, {value: STAKE_AMOUNT});
+            console.log("Node initialized");
+        }
+
+        
         scytale.on("MessageBroadcasted", async (storeNodeAddress, messageHash) => {
             try {
                 if (signerAddress.toLowerCase() == storeNodeAddress.toString().toLowerCase()) {
@@ -94,7 +107,7 @@ async function initializeEthers() {
             }
 
         });
-
+       
                 //ADMIN
                 app.post("/depositStake", async (req, res) => {
                     if (req.body.admin != process.env.ADMIN_KEY) return res.status(401).json("No authorization!");
@@ -105,6 +118,7 @@ async function initializeEthers() {
                     res.status(200).json("Success!");
                 });
 
+                console.log("Listener has added successfully!");
 
 
     } catch (e) {
