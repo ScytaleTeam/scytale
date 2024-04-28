@@ -26,7 +26,7 @@ async function main() {
                 await vrf.submitRandom(value, randValue);
                 console.log("successful on: ", value);
             } catch (e) {
-
+                console.log("Error: ", e.message);
             }
 
         })
