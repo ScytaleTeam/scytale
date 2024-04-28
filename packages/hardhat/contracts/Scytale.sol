@@ -15,6 +15,8 @@ contract Scytale {
     event MessageBroadcasted(address indexed storeNodeAddress, bytes32 indexed messageHash);
     event AcceptedMessage(address indexed sender, bytes32 indexed messageHash, string indexed receiverKey);
 
+    event StoreNodeInitialized(address indexed nodeAddress, string apiUrl);
+
     mapping(address => string) public rsaKeys;
     address public alertVerifierAddress;
 
@@ -85,7 +87,7 @@ function updateNode(string calldata messageUrl, uint price) public payable {
     storeNodes[msg.sender].stakeBalance += msg.value;
      storeNodes[msg.sender].messageRelayAPI = messageUrl;
      storeNodes[msg.sender].price = price;
-
+    emit StoreNodeInitialized(msg.sender, storeNodes[msg.sender].messageRelayAPI);
 }
 
     function updateMessageUrl(string calldata messageUrl) public {
@@ -95,6 +97,7 @@ function updateNode(string calldata messageUrl, uint price) public payable {
     }
  
     function depositNodeStake() public payable {
+        emit StoreNodeInitialized(msg.sender, storeNodes[msg.sender].messageRelayAPI);
         storeNodes[msg.sender].stakeBalance += msg.value;
     }
 
