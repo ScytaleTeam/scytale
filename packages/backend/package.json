@@ -2,7 +2,17 @@
 	"name": "@scytale/backend",
 	"packageManager": "yarn@3.2.3",
 	"dependencies": {
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
 		"dotenv": "^16.4.5",
-		"ethers": "^6.12.0"
+		"ethers": "^6.12.0",
+		"express": "^4.19.2",
+		"fs": "^0.0.1-security",
+		"js-sha256": "^0.11.0"
+	},
+	"devDependencies": {
+		"@types/cookie-parser": "^1",
+		"@types/cors": "^2",
+		"@types/express": "^4"
 	}
 }
