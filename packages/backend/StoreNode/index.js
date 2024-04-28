@@ -8,7 +8,13 @@ require('dotenv').config()
 const sha256 = require('js-sha256');
 const scytaleArtifact = require("../../hardhat/artifacts/contracts/Scytale.sol/Scytale.json");
 
-const port = process.env.PORT || 8080;
+//node index.js PRIVATE_KEY PORT
+//or it can be added to env
+const args = process.argv;
+const privateKeyArg = args[2];
+const portArg = args[3]
+
+const port = portArg || process.env.PORT || 8080;
 const app = express();
 app.use(
     cors()
@@ -54,9 +60,11 @@ app.get("/getMessage", async (req, res) => {
 });
 
 
+
+
 async function setupSigner() {
     const provider = new ethers.JsonRpcProvider(chainConfig.providerUrl);
-    let signer = new ethers.Wallet(process.env.PRIVATE_KEY);
+    let signer = new ethers.Wallet(privateKeyArg ? privateKeyArg : process.env.PRIVATE_KEY);
     signer = signer.connect(provider);
     console.log("Signer address: ", await signer.getAddress());
     globalSigner = signer;

@@ -40,7 +40,7 @@ async function main() {
             let res = await alertVerifier.beActiveVerifier({value: VERIFIER_STAKE});
             console.log("Became a verifier");
         } catch(e) {
-            console.log("Already verifier, continuing...");
+            console.log("Already verifier or no balance, continuing...");
         }
 
         alertVerifier.on("VerificationTask", async (verifier, id) => {
