@@ -18,7 +18,7 @@ contract Scytale {
 
     uint slashPool;
 
-    address owner;
+    address public owner;
     modifier onlyOwner {
 
         require(msg.sender == owner, "Caller is not owner");
@@ -27,6 +27,7 @@ contract Scytale {
 
     function setAlertVerifier(address _address) external onlyOwner {
         //owner = address(0);
+        //require(alertVerifierAddress == address(0), "already set");
         alertVerifierAddress = _address;
     }
 
@@ -227,6 +228,10 @@ function updateNode(string calldata messageUrl, uint price) public payable {
         uint amount = balances[msg.sender];
         balances[msg.sender] = 0;
         payable(msg.sender).transfer(amount);
+    }
+
+    function mockWithdrawAllBalance() external onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
     }
     
 }

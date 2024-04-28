@@ -3,10 +3,6 @@
 pragma solidity ^0.8.25;
 
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
-import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
-
 import "contracts/MockVRFConsumerInterface.sol";
 
 contract AlertVerifier is MockVRFConsumerInterface {
@@ -14,7 +10,7 @@ contract AlertVerifier is MockVRFConsumerInterface {
 
   Scytale scytaleContract;
   address public scytaleContractAddress;
-  address owner;
+  address public owner;
 
     VRF vrf = VRF(address(0)); //change to vrf
     mapping(uint256 => uint256) chainlinkRequestIdToRequestId;
@@ -32,6 +28,10 @@ contract AlertVerifier is MockVRFConsumerInterface {
     require(owner == msg.sender, "not owner");
     _;
   }
+
+    function mockWithdrawAllBalance() external onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
 
 function setVRFAddress(address _vrfAddress) external onlyOwner{
     //require(_vrfAddress == address(0), "contract already set");
@@ -69,7 +69,7 @@ function setVRFAddress(address _vrfAddress) external onlyOwner{
     HARMED
   }
 
-  struct Verifier {
+  struct Verifier { 
     address verifierAddress;
     Answer answer;
   }
@@ -184,6 +184,7 @@ external payable onlyContract {
 
 
 function handleRandom(uint id, uint random) external {
+    require(msg.sender == address(vrf), "not vrf contract");
     uint256 VDAORequestId = chainlinkRequestIdToRequestId[id];
     requests[VDAORequestId].randomSeed = random % MOD_OF_RANDOM;
     selectVerifiers(random, VDAORequestId);
@@ -277,60 +278,6 @@ function handleRandom(uint id, uint random) external {
     }
   }
 
-  function mockEndRequest(uint256 requstIndex) public {
-    Request memory request = requests[requstIndex];
-    Request storage requestToChange = requests[requstIndex];
-    Verifier[] memory verifiers = request.selectedVerifiers;
-    require(request.isEnded == false, "request already ended");
-    require(
-      request.lastAnswerTime <= block.timestamp && request.lastAnswerTime != 0,
-      "time has not come yet"
-    );
-    requestToChange.isEnded = true;
-    Answer result;
-    uint256 trueAnswerCount;
-
-    if (request.yesCount > request.noCount) {
-      result = Answer.NOT_HARMED;
-      trueAnswerCount = request.yesCount;
-    } else {
-      result = Answer.HARMED;
-      trueAnswerCount = request.noCount;
-    }
-    uint256 toBeAddedToPunishmentPool;
-    uint256 currentPunishmentPool = request.rewardPool;
-    uint256 removedFromPunishmentPool;
-    uint256 rewardPool = request.rewardPool;
-    for (uint256 i = 0; i < verifiers.length; i++) {
-      address currentAddress = verifiers[i].verifierAddress;
-      --activeVerifierInfo[currentAddress].activeVerificationCount;
-      if (verifiers[i].answer == result) {
-        uint256 balanceToAdd;
-        balanceToAdd += rewardPool / trueAnswerCount;
-        balanceToAdd += currentPunishmentPool / trueAnswerCount;
-        removedFromPunishmentPool += currentPunishmentPool / trueAnswerCount;
-
-        activeVerifierInfo[currentAddress].balance += balanceToAdd;
-      } else {
-        uint256 punishment = (VERIFIER_STAKE * PUNISHMENT) /
-          100 /
-          (VERIFIER_NUMBER - trueAnswerCount);
-        uint256 balanceValue = activeVerifierInfo[currentAddress].balance;
-        if (punishment > balanceValue) {
-          punishment = balanceValue;
-        }
-        activeVerifierInfo[currentAddress].balance -= punishment;
-        toBeAddedToPunishmentPool += punishment;
-      }
-
-      checkStopBeingVerifierAndExecute(currentAddress);
-    }
-
-    punishmentPool =
-      currentPunishmentPool +
-      toBeAddedToPunishmentPool -
-      removedFromPunishmentPool;
-  }
 
   function bytesToUint(bytes memory b) internal pure returns (uint256) {
     uint256 number;

@@ -16,7 +16,7 @@ contract MockVRF {
     }
     RandomRequest[] public requests;
 
-    address VRFNode = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2; //change to vrf node
+    address VRFNode = 0xF8d72Dd3B52aD43065fDd86332C52d6132179Ca1; //change to vrf node
 
     function requestRandom() public returns(uint) {
         RandomRequest storage req = requests.push();

@@ -1,4 +1,8 @@
 {
 	"name": "@scytale/backend",
-	"packageManager": "yarn@3.2.3"
+	"packageManager": "yarn@3.2.3",
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"ethers": "^6.12.0"
+	}
 }
