@@ -20,6 +20,7 @@ const TopCard: React.FC<TopCardProps> = ({ title, amount,  }) => {
                 </CardContent>
             </Card>
         </div>
+        
     );
 };
 

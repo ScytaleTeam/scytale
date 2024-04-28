@@ -39,6 +39,12 @@ export const NavigationItems = [
     title: "Node FE",
     icon: null,
     href: "/node-fe",
+    
+  },
+  {
+    title: "Node Form",
+    icon: null,
+    href: "/node-form",
   },
 ]
 
