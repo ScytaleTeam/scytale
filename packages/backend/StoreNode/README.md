@@ -17,3 +17,4 @@ cd ../backend/StoreNode
 node index.js
 
 ### Done!
+You need to stay on to provide data sharing services. Don't forget to set your port settings!
