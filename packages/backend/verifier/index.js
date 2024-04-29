@@ -35,7 +35,7 @@ async function main() {
     try {
         const alertVerifier = new ethers.Contract(chainConfig.alertVerifierAddress, alertVerifierArtifact.abi, signer);
 
-        console.log("Balance:", await signer.provider.getBalance(signer.getAddress))
+        console.log("Balance:", await signer.provider.getBalance(signer.address))
 
         try 
         {
