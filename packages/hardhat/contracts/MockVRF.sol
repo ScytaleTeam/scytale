@@ -12,11 +12,12 @@ contract MockVRF {
 
     struct RandomRequest {
         address requester;
+        uint randomValue;
         bool isFinished;
     }
     RandomRequest[] public requests;
 
-    address VRFNode = 0xF8d72Dd3B52aD43065fDd86332C52d6132179Ca1; //change to vrf node
+    address VRFNode = 0xF8d72Dd3B52aD43065fDd86332C52d6132179Ca1;
 
     function requestRandom() public returns(uint) {
         RandomRequest storage req = requests.push();
@@ -29,8 +30,9 @@ contract MockVRF {
 
     function submitRandom(uint id, uint value) public {
         require(requests[id].isFinished == false, "already finished");
-        //require(msg.sender == VRFNode, "only vrf node");
+        require(msg.sender == VRFNode, "only vrf node");
         requests[id].isFinished = true;
+        requests[id].randomValue = value;
         MockVRFConsumerInterface(requests[id].requester).handleRandom(id, value);
 
     }  

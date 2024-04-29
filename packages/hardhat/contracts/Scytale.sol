@@ -208,7 +208,7 @@ function updateNode(string calldata messageUrl, uint price) public payable {
         alert.isFinished = true;
         alert.isFreeRider = result;
         Message storage message = messages[alert.messageHash];
-        StoreNode storage storeNode = storeNodes[message.senderAddress];
+        StoreNode storage storeNode = storeNodes[message.storeNodeAddress];
 
         if(result) {
         //slash stake
