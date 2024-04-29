@@ -16,7 +16,6 @@ import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon"
 import { useState } from "react"
 import { NodeSheet } from "./node-sheet"
 import { useRSAContext } from "@/lib/context"
-import { title } from "process"
 import { Address } from "./address"
 
 export const Logo = ({ className }: { className?: string }) => {
