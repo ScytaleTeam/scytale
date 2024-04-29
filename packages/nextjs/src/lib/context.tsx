@@ -32,13 +32,16 @@ export const useRSAContext = () => {
 export const RSAContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [keyPair, setKeyPair] = React.useState<CryptoKeyPair | null>(null)
   const [{ publicKey, privateKey }, setKeys] = React.useState<{ publicKey: string; privateKey: string }>({
-    publicKey: window ? window.localStorage.getItem("publicKey") || "" : "",
-    privateKey: window ? window.localStorage.getItem("privateKey") || "" : "",
+    publicKey: "",
+    privateKey: "",
   })
 
   useEffect(() => {
-    if (privateKey && publicKey) {
-      deriveKeyPairAndSet(privateKey, publicKey)
+    const priKey = localStorage.getItem("privateKey")
+    const pubKey = localStorage.getItem("publicKey")
+
+    if (priKey && pubKey) {
+      deriveKeyPairAndSet(priKey, pubKey)
     } else {
       generateKeyPairAndSet()
     }
@@ -48,21 +51,18 @@ export const RSAContextProvider = ({ children }: { children: React.ReactNode }) 
     const keyPair = await generateKeyPair()
     const privateKey = await pemEncodedPrivateKey(keyPair)
     const publicKey = await pemEncodedPublicKey(keyPair)
+    localStorage.setItem("publicKey", publicKey)
+    localStorage.setItem("privateKey", privateKey)
     setKeyPair(keyPair)
     setKeys({ publicKey, privateKey })
   }
 
   const deriveKeyPairAndSet = async (privateKey: string, publicKey: string) => {
-    try {
-      const priKey = await importPrivateKey(privateKey)
-      const pubKey = await importPublicKey(publicKey)
-      const keyPair = { privateKey: priKey, publicKey: pubKey }
-      localStorage.setItem("publicKey", publicKey)
-      localStorage.setItem("privateKey", privateKey)
-      setKeyPair(keyPair)
-    } catch (e) {
-      console.error(e)
-    }
+    const priKey = await importPrivateKey(privateKey)
+    const pubKey = await importPublicKey(publicKey)
+    const keyPair = { privateKey: priKey, publicKey: pubKey }
+    setKeyPair(keyPair)
+    setKeys({ publicKey, privateKey })
   }
 
   const encryptData = async (data: string, publicKey: CryptoKey) => {
