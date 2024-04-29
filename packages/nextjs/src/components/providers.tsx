@@ -3,7 +3,7 @@
 import "@rainbow-me/rainbowkit/styles.css"
 import { darkTheme, getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit"
 import { WagmiProvider } from "wagmi"
-import { hardhat, sepolia, scroll } from "wagmi/chains"
+import { scrollSepolia } from "wagmi/chains"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 import Header from "./header"
 import { Toaster } from "@/components/ui/toaster"
@@ -13,7 +13,7 @@ import { RSAContextProvider } from "@/lib/context"
 const config = getDefaultConfig({
   appName: "Scytale",
   projectId: "YOUR_PROJECT_ID",
-  chains: [hardhat, sepolia, scroll],
+  chains: [scrollSepolia],
   ssr: true, // If your dApp uses server side rendering (SSR)
 })
 

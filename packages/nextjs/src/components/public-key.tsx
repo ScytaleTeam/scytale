@@ -1,10 +1,9 @@
 "use client"
-//TODO: change to use etherscan to scrollscan
 
 import { CopyIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import { QrCodeIcon, ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
+import { QrCodeIcon } from "@heroicons/react/24/solid"
 import {
   Dialog,
   DialogContent,
@@ -16,6 +15,10 @@ import {
 } from "@/components/ui/dialog"
 import QRCode from "react-qr-code"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useAccount, useWriteContract, useReadContract } from "wagmi"
+import config from "../../config"
+import { ArrowUpOnSquareIcon } from "@heroicons/react/24/outline"
+import { useEffect } from "react"
 
 interface PublicKeyProps {
   address: string
@@ -77,8 +80,61 @@ export const PublicKey: React.FunctionComponent<PublicKeyProps> = ({ address, pe
     splittedAddress.push(address.substring(i, i + 40))
   }
 
+  const account = useAccount()
+
+  const { data: hash, isPending, isSuccess, error, writeContract } = useWriteContract()
+  const { data: rsaKey, isFetched } = useReadContract({
+    address: config.scytale.address,
+    abi: config.scytale.abi,
+    functionName: "rsaKeys",
+    args: [account.address],
+  })
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("success")
+      toast({
+        title: "🎉 Public key updated",
+        description: "Your public key has been successfully updated",
+      })
+    }
+    if (error) {
+      console.log("error")
+      toast({
+        title: "❌ Error",
+        description: error.message,
+        variant: "destructive",
+      })
+    }
+  }, [isSuccess, error])
+
+  const handleUpdatePublicAddress = async () => {
+    if (!account.isConnected) {
+      toast({
+        title: "🔒 Connect Your Wallet",
+        description: "Please connect your wallet to update your public key",
+      })
+      return
+    }
+
+    if (isFetched && rsaKey === pemAddress) {
+      toast({
+        title: "🔑 Public key already in use",
+        description: "You are already using this public key",
+      })
+      return
+    }
+
+    writeContract({
+      address: config.scytale.address,
+      abi: config.scytale.abi,
+      functionName: "changeRsaPublicKey",
+      args: [pemAddress],
+    })
+  }
+
   return (
-    <div className="text-center flex justify-center w-fit border rounded-md">
+    <div className="text-center flex justify-center w-fit border rounded-md overflow-scroll">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
@@ -115,6 +171,9 @@ export const PublicKey: React.FunctionComponent<PublicKeyProps> = ({ address, pe
         <CopyIcon className="h-5 w-5" />
       </Button>
       <QrModal address={address} pemAddress={pemAddress} />
+      <Button onClick={() => handleUpdatePublicAddress()} className="px-2" disabled={isPending}>
+        <ArrowUpOnSquareIcon className="w-5 h-5" />
+      </Button>
     </div>
   )
 }

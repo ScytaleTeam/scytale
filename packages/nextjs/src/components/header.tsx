@@ -106,7 +106,7 @@ const NavMenuMobile = ({ publicKey }: { publicKey: string }) => {
                   </Link>
                 </NavigationMenuItem>
               ))}
-              <div className="flex items-center justify-center w-full p-2 gap-2">
+              <div className="flex items-center justify-center w-full gap-2 py-2">
                 <PublicKey address={removePemHeaderAndFooter(publicKey)} pemAddress={publicKey} />
               </div>
             </NavigationMenuList>
@@ -129,7 +129,7 @@ export default function Header() {
           <ConnectButton
             accountStatus={{
               smallScreen: "avatar",
-              largeScreen: "full",
+              largeScreen: "avatar",
             }}
           />
         </div>

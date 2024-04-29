@@ -1,13 +1,15 @@
-const alertVerifierArtifact = require("../../hardhat/artifacts/contracts/AlertVerifier.sol/AlertVerifier.json")
-const scytaleArtifact = require("../../hardhat/artifacts/contracts/Scytale.sol/Scytale.json")
+import alertVerifierArtifact from "../hardhat/artifacts/contracts/AlertVerifier.sol/AlertVerifier.json"
+import scytaleArtifact from "../hardhat/artifacts/contracts/Scytale.sol/Scytale.json"
 
-export const config = {
+const config = {
   alertVerifier: {
-    address: "0x96D87Bbd17De59B885249A973723bA51377D70aE",
+    address: "0xC3e5C369AD47495a82925F762912703DC65Cd60B" as `0x${string}`,
     abi: alertVerifierArtifact.abi,
   },
   scytale: {
-    address: "0xDa527138560e94E7B8773e5d260B964232e76863",
+    address: "0x0aF36aEef5E696701B85185CEDC534538008990F" as `0x${string}`,
     abi: scytaleArtifact.abi,
   },
 }
+
+export default config
