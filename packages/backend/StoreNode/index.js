@@ -137,6 +137,11 @@ async function initializeEthers() {
                     res.status(200).json("Success!");
                 });
 
+                app.get("/getAddress", async (req, res) => {
+
+                    res.status(200).json(signerAddress);
+                });
+
                 console.log("Listener has added successfully!");
 
 
