@@ -1,5 +1,5 @@
-import alertVerifierArtifact from "../hardhat/artifacts/contracts/AlertVerifier.sol/AlertVerifier.json"
-import scytaleArtifact from "../hardhat/artifacts/contracts/Scytale.sol/Scytale.json"
+import alertVerifierArtifact from "./abi/alertVerifier.json"
+import scytaleArtifact from "./abi/scytale.json"
 
 const config = {
   alertVerifier: {
