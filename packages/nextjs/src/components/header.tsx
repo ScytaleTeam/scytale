@@ -10,14 +10,11 @@ import {
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import Link from "next/link"
 
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-
 import { ConnectButton } from "@rainbow-me/rainbowkit"
-import GlobeAltIcon from "@heroicons/react/24/outline/GlobeAltIcon"
 import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon"
 import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon"
-import { Button } from "./ui/button"
 import { useState } from "react"
+import { NodeSheet } from "./node-sheet"
 
 export const Logo = ({ className }: { className?: string }) => {
   return (
@@ -121,17 +118,7 @@ export default function Header() {
         <NavMenuDesktop />
         <NavMenuMobile />
         <div className="flex gap-4 flex-row-reverse items-center justify-center">
-          <Sheet>
-            <SheetTrigger>
-              <GlobeAltIcon className="h-8 w-8" />
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Available Nodes</SheetTitle>
-                <SheetDescription></SheetDescription>
-              </SheetHeader>
-            </SheetContent>
-          </Sheet>
+          <NodeSheet nodes={[]} />
           <ConnectButton
             accountStatus={{
               smallScreen: "avatar",

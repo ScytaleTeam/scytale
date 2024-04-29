@@ -3,7 +3,7 @@
 pragma solidity ^0.8.19;
 
 
-import "contracts/MockVRFConsumerInterface.sol";
+import "./MockVRFConsumerInterface.sol";
 
 
 contract MockVRF {
@@ -29,6 +29,7 @@ contract MockVRF {
 
     function submitRandom(uint id, uint value) public {
         require(requests[id].isFinished == false, "already finished");
+        //require(msg.sender == VRFNode, "only vrf node");
         requests[id].isFinished = true;
         MockVRFConsumerInterface(requests[id].requester).handleRandom(id, value);
 

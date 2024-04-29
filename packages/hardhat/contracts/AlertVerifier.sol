@@ -3,7 +3,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "contracts/MockVRFConsumerInterface.sol";
+import "./MockVRFConsumerInterface.sol";
 
 contract AlertVerifier is MockVRFConsumerInterface {
   event VerificationTask(address indexed verifier, uint256 indexed requestId);

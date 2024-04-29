@@ -20,6 +20,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface AddressProps {
   address: string
   showQR?: boolean
+  size?: "sm" | "md" | "lg"
 }
 
 export const QRButton: React.FunctionComponent = () => {
@@ -34,8 +35,8 @@ export const QrModal = ({ address }: { address: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <QrCodeIcon className="mr-2 h-4 w-4" />
+        <Button variant="outline" className="p-3">
+          <QrCodeIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -57,30 +58,34 @@ export const QrModal = ({ address }: { address: string }) => {
   )
 }
 
-export const Address: React.FunctionComponent<AddressProps> = ({ address, showQR }) => {
+export const Address: React.FunctionComponent<AddressProps> = ({ address, showQR, size }) => {
   const { toast } = useToast()
-  const etherscanURL = `https://etherscan.io/address/${address}`
+  const scrollScanURL = `https://sepolia.scrollscan.com/address/${address}`
 
   return (
     <div className="text-center flex justify-center w-fit border rounded-md">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
-            <a href={etherscanURL}>
+            <a href={scrollScanURL}>
               <Button variant="ghost">
-                <p className="font-mono text-md sm:hidden block">
-                  {address.substring(0, 5) + "-" + address.substring(address.length - 5)}
-                </p>
-                <p className="font-mono text-md hidden sm:block">
-                  {address.substring(0, 10) + "-" + address.substring(address.length - 10)}
-                </p>
-                <p className="font-mono text-md md:block hidden">{address}</p>
+                {(size === "sm" || size === "md" || size === "lg" || !size) && (
+                  <p className="font-mono text-md sm:hidden block">
+                    {address.substring(0, 5) + "-" + address.substring(address.length - 5)}
+                  </p>
+                )}
+                {(size === "md" || size === "lg" || !size) && (
+                  <p className="font-mono text-md hidden sm:block">
+                    {address.substring(0, 10) + "-" + address.substring(address.length - 10)}
+                  </p>
+                )}
+                {(size === "lg" || !size) && <p className="font-mono text-md md:block hidden">{address}</p>}
               </Button>
             </a>
           </TooltipTrigger>
           <TooltipContent>
-            <a href={etherscanURL} className="flex items-center">
-              <p>Open in etherscan</p>
+            <a href={scrollScanURL} className="flex items-center text-xs">
+              <p>Open in scroll scan</p>
               <ArrowTopRightOnSquareIcon className="ml-1 h-3 w-3" />
             </a>
           </TooltipContent>
