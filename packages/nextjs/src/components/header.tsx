@@ -17,6 +17,7 @@ import { useState } from "react"
 import { NodeSheet } from "./node-sheet"
 import { useRSAContext } from "@/lib/context"
 import { Address } from "./address"
+import { PublicKey } from "./public-key"
 
 export const Logo = ({ className }: { className?: string }) => {
   return (
@@ -66,7 +67,7 @@ const NavMenuDesktop = ({ publicKey }: { publicKey: string }) => {
           ))}
         </NavigationMenuList>
       </NavigationMenu>
-      <Address address={removePemHeaderAndFooter(publicKey)} showQR size="md" />
+      <PublicKey address={removePemHeaderAndFooter(publicKey)} pemAddress={publicKey} />
     </div>
   )
 }
@@ -106,8 +107,7 @@ const NavMenuMobile = ({ publicKey }: { publicKey: string }) => {
                 </NavigationMenuItem>
               ))}
               <div className="flex items-center justify-center w-full p-2 gap-2">
-                Public Key: <Address address={removePemHeaderAndFooter(publicKey)} showQR size="md" />{" "}
-                {/*TODO: UPDATE TO WITH PEM_ADDRESS COMPONENT*/}
+                <PublicKey address={removePemHeaderAndFooter(publicKey)} pemAddress={publicKey} />
               </div>
             </NavigationMenuList>
           </NavigationMenu>
