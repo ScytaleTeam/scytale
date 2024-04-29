@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn, removePemHeaderAndFooter } from "@/lib/utils"
 import Image from "next/image"
 import {
   NavigationMenu,
@@ -15,6 +15,9 @@ import Bars3Icon from "@heroicons/react/24/solid/Bars3Icon"
 import XMarkIcon from "@heroicons/react/24/solid/XMarkIcon"
 import { useState } from "react"
 import { NodeSheet } from "./node-sheet"
+import { useRSAContext } from "@/lib/context"
+import { title } from "process"
+import { Address } from "./address"
 
 export const Logo = ({ className }: { className?: string }) => {
   return (
@@ -36,7 +39,6 @@ export const NavigationItems = [
     title: "Node FE",
     icon: null,
     href: "/node-fe",
-    
   },
   {
     title: "Node Form",
@@ -45,7 +47,7 @@ export const NavigationItems = [
   },
 ]
 
-const NavMenuDesktop = () => {
+const NavMenuDesktop = ({ publicKey }: { publicKey: string }) => {
   return (
     <div className="flex-row md:gap-4 items-start justify-end md:flex hidden">
       <Logo className="w-24 h-6 top-1 md:block hidden" />
@@ -65,11 +67,12 @@ const NavMenuDesktop = () => {
           ))}
         </NavigationMenuList>
       </NavigationMenu>
+      <Address address={removePemHeaderAndFooter(publicKey)} showQR size="md" />
     </div>
   )
 }
 
-const NavMenuMobile = () => {
+const NavMenuMobile = ({ publicKey }: { publicKey: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
     <div className="md:hidden">
@@ -103,6 +106,10 @@ const NavMenuMobile = () => {
                   </Link>
                 </NavigationMenuItem>
               ))}
+              <div className="flex items-center justify-center w-full p-2 gap-2">
+                Public Key: <Address address={removePemHeaderAndFooter(publicKey)} showQR size="md" />{" "}
+                {/*TODO: UPDATE TO WITH PEM_ADDRESS COMPONENT*/}
+              </div>
             </NavigationMenuList>
           </NavigationMenu>
         )}
@@ -112,11 +119,12 @@ const NavMenuMobile = () => {
 }
 
 export default function Header() {
+  const { publicKey } = useRSAContext()
   return (
     <div className="flex flex-row justify-center items-center border-b fixed w-full z-20 bg-black">
       <div className="flex flex-row justify-between items-center max-w-7xl md:px-12 px-2 py-4 w-full">
-        <NavMenuDesktop />
-        <NavMenuMobile />
+        <NavMenuDesktop publicKey={publicKey} />
+        <NavMenuMobile publicKey={publicKey} />
         <div className="flex gap-4 flex-row-reverse items-center justify-center">
           <NodeSheet nodes={[]} />
           <ConnectButton

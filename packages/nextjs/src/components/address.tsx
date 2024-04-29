@@ -50,7 +50,9 @@ export const QrModal = ({ address }: { address: string }) => {
             </div>
           </DialogDescription>
           <DialogFooter>
-            <p className="pt-2 text-center font-mono text-gray-400 text-sm w-full">{address}</p>
+            <p className="pt-2 text-center font-mono text-gray-400 text-sm w-full">
+              {address.substring(0, 10) + "-" + address.substring(address.length - 10)}
+            </p>
           </DialogFooter>
         </DialogHeader>
       </DialogContent>
