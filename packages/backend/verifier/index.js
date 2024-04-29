@@ -35,6 +35,8 @@ async function main() {
     try {
         const alertVerifier = new ethers.Contract(chainConfig.alertVerifierAddress, alertVerifierArtifact.abi, signer);
 
+        console.log("Balance:", await signer.provider.getBalance(signer.getAddress))
+
         try 
         {
             let res = await alertVerifier.beActiveVerifier({value: VERIFIER_STAKE});
