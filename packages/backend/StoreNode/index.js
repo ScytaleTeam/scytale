@@ -74,7 +74,7 @@ async function setupSigner() {
 const STAKE_AMOUNT = ethers.parseEther("0.1");
 const DEFAULT_PRICE = ethers.parseEther("0.001");
 
-const messageRelayAPI = `${process.env.IP_ADDRESS}/postMessage`
+const messageRelayAPI = `${process.env.IP_ADDRESS}:${port}/postMessage`
 
 async function initializeEthers() {
     const signer = await setupSigner();
@@ -106,7 +106,7 @@ async function initializeEthers() {
                     console.log("Received Broadcast: ", storeNodeAddress, messageHash);
                     const fileName = messageHash.toString().toLowerCase().substring(2);
                     const data = fs.readFileSync(`${folderName}/${fileName}`, 'utf8');
-                    const apiEndpoint = `${process.env.IP_ADDRESS}/getMessage?messageHash=${fileName}`;
+                    const apiEndpoint = `${process.env.IP_ADDRESS}:${port}/getMessage?messageHash=${fileName}`;
                     
                     await scytale.acceptMessage(messageHash, apiEndpoint);
                     console.log("Success: ", messageHash);

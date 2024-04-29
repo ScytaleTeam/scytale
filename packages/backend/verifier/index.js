@@ -51,7 +51,7 @@ async function main() {
                     const request = await alertVerifier.requests(id);
                     const res = await checkData(request.dataUrl, request.messageHash);
 
-                    const reciept = await alertVerifier.giveAnswer(id, res);
+                    const reciept = await alertVerifier.giveAnswer(id, !res); //if equal, alert is wrong, so it is opposite
 
                     console.log("verification result on: ", id, res, request.dataUrl, request.messageHash);
                 }
