@@ -4,7 +4,7 @@ require('dotenv').config()
 const mockVrfArtifact = require("../../hardhat/artifacts/contracts/MockVRF.sol/MockVRF.json");
 
 const rpc = process.env.SCROLL_SEPOLIA_RPC || chainConfig.providerUrl;
-console.log(rpc);
+
 
 async function setupSigner() {
     const provider = new ethers.JsonRpcProvider(rpc);
