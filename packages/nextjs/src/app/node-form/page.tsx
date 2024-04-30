@@ -25,7 +25,7 @@ export default function Page() {
     <Card className="w-[550px]">
       <CardHeader>
         <CardTitle>Create Node</CardTitle>
-        <CardDescription>deploy your node</CardDescription>
+        <CardDescription>Deploy your node</CardDescription>
       </CardHeader>
       <CardContent>
         <form>

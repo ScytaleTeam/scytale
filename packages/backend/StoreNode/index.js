@@ -62,10 +62,10 @@ app.get("/getMessage", async (req, res) => {
 
 });
 
-app.get("/ping", async(req, res) => {
+app.get("/ping", async (req, res) => {
     try {
         res.status(200).json("Online");
-    } catch(e) {
+    } catch (e) {
         es.status(500).json("Error!");
     }
 })
@@ -90,25 +90,25 @@ async function initializeEthers() {
     const signerAddress = await signer.getAddress();
     try {
         const scytale = new ethers.Contract(chainConfig.scytaleAddress, scytaleArtifact.abi, signer);
-        
+
         let isStoreNodeExists;
         try {
-        const storeNode = await scytale.storeNodes(signer.address);
-        console.log(storeNode.stakeBalance);
-        isStoreNodeExists = storeNode.stakeBalance != 0;
-        } catch(e) {
+            const storeNode = await scytale.storeNodes(signer.address);
+            console.log(storeNode.stakeBalance);
+            isStoreNodeExists = storeNode.stakeBalance != 0;
+        } catch (e) {
             isStoreNodeExists = false;
         }
 
 
-        if(!isStoreNodeExists) {
-            await scytale.updateNode(messageRelayAPI, DEFAULT_PRICE, {value: STAKE_AMOUNT});
+        if (!isStoreNodeExists) {
+            await scytale.updateNode(messageRelayAPI, DEFAULT_PRICE, { value: STAKE_AMOUNT });
             console.log("Node initialized");
         }
 
         await scytale.updateMessageUrl(messageRelayAPI);
 
-        
+
         scytale.on("MessageBroadcasted", async (storeNodeAddress, messageHash) => {
             try {
                 if (signerAddress.toLowerCase() == storeNodeAddress.toString().toLowerCase()) {
@@ -116,33 +116,47 @@ async function initializeEthers() {
                     const fileName = messageHash.toString().toLowerCase().substring(2);
                     const data = fs.readFileSync(`${folderName}/${fileName}`, 'utf8');
                     const apiEndpoint = `${process.env.IP_ADDRESS}:${port}/getMessage?messageHash=${fileName}`;
-                    
+
                     await scytale.acceptMessage(messageHash, apiEndpoint);
                     console.log("Success: ", messageHash);
                 }
 
             } catch (e) {
-                console.error("Error:" ,e.message);
+                console.error("Error:", e.message);
             }
 
         });
-       
-                //ADMIN
-                app.post("/depositStake", async (req, res) => {
-                    if (req.body.admin != process.env.ADMIN_KEY) return res.status(401).json("No authorization!");
-                    console.log(await signer.provider.getBalance(signerAddress));
-                    const reciept = await scytale.depositNodeStake({value: ethers.parseEther("0.1")});
-                    console.log(reciept);
 
-                    res.status(200).json("Success!");
-                });
+        //ADMIN
+        app.post("/depositStake", async (req, res) => {
+            if (req.body.admin != process.env.ADMIN_KEY) return res.status(401).json("No authorization!");
+            console.log(await signer.provider.getBalance(signerAddress));
+            const reciept = await scytale.depositNodeStake({ value: ethers.parseEther("0.1") });
+            console.log(reciept);
 
-                app.get("/getAddress", async (req, res) => {
+            res.status(200).json("Success!");
+        });
 
-                    res.status(200).json(signerAddress);
-                });
+        //ADMIN
+        app.post("/updateNode", async (req, res) => {
+            try {
+            console.log(await signer.provider.getBalance(signerAddress));
+            const reciept = await scytale.updateNode(messageRelayAPI, ethers.parseEther(req.body.price), 
+            { value: ethers.parseEther(req.body.stake) });
+            console.log(reciept);
 
-                console.log("Listener has added successfully!");
+            res.status(200).json("Success!");
+            } catch(e) {
+                console.log(e.message);
+            }
+        });
+
+        app.get("/getAddress", async (req, res) => {
+
+            res.status(200).json(signerAddress);
+        });
+
+        console.log("Listener has added successfully!");
 
 
     } catch (e) {
