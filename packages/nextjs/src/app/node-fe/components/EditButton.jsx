@@ -72,11 +72,14 @@ export default function EditButton() {
     }, [isSuccess, error])
 
     const getMyNode = async () => {
+        try {
+            const res = await fetch("http://localhost:8080/getAddress"); //to get local node data if it is working
+            if (res.ok) {
+                let json = await res.json();
+                setMyNodeAddress(json);
 
-        const res = await fetch("http://localhost:8080/getAddress"); //to get local node data if it is working
-        if (res.ok) {
-            let json = await res.json();
-            setMyNodeAddress(json);
+            }
+        } catch (e) {
 
         }
     }
@@ -84,32 +87,6 @@ export default function EditButton() {
     useEffect(() => {
         getMyNode();
     }, [])
-
-
-    const handleUpdatePublicAddress = async () => {
-        if (!account.isConnected) {
-            toast({
-                title: "🔒 Connect Your Wallet",
-                description: "Please connect your wallet to update your public key",
-            })
-            return
-        }
-
-        if (isFetched && rsaKey === pemAddress) {
-            toast({
-                title: "🔑 Public key already in use",
-                description: "You are already using this public key",
-            })
-            return
-        }
-
-        writeContract({
-            address: config.scytale.address,
-            abi: config.scytale.abi,
-            functionName: "changeRsaPublicKey",
-            args: [pemAddress],
-        })
-    }
 
 
 

@@ -36,15 +36,16 @@ export const NavigationItems = [
     href: "/message",
   },
   {
-    title: "Node FE",
+    title: "All Messages",
+    icon: null,
+    href: "/all-messages",
+  },
+  {
+    title: "My Node",
     icon: null,
     href: "/node-fe",
   },
-  {
-    title: "Node Form",
-    icon: null,
-    href: "/node-form",
-  },
+
 ]
 
 const NavMenuDesktop = ({ publicKey }: { publicKey: string }) => {

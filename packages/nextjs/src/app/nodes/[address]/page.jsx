@@ -80,7 +80,7 @@ const NodePage = ({params}) => {
           </div>
         </MiddleCard>
         <MiddleCard title="Active messages" bottom=" ">
-          <div className=" mt-5 mb-5 font-bold text-center text-3xl text-white"> {activeMessages ? formatEther(activeMessages) : 0} </div>
+          <div className=" mt-5 mb-5 font-bold text-center text-3xl text-white"> {activeMessages?.toString()} </div>
           <div className="flex justify-center gap-8 mt-10 items-center ">
             {" "}
             <Button> Look all messages</Button>{" "}

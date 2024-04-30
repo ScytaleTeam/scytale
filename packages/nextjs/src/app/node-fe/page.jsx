@@ -12,13 +12,13 @@ import { CopyIcon } from "@radix-ui/react-icons"
 import { useToast } from "@/components/ui/use-toast"
 import { QrCodeIcon } from "@heroicons/react/24/solid"
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useAccount, useWriteContract, useReadContract } from "wagmi"
@@ -29,43 +29,50 @@ import { Label } from "@/components/ui/label"
 
 import { formatEther, parseEther } from 'viem'
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useRouter } from "next/navigation"
 
 const DEFAULT_STAKE = parseEther("0.1");
 
 const Page = () => {
-
+  const router = useRouter()
   const [myNodeAddress, setMyNodeAddress] = useState();
 
 
 
   const { data: storeNode, isFetched: isFetchedNode, error: nodeErr } = useReadContract({
-      address: config.scytale.address,
-      abi: config.scytale.abi,
-      functionName: "storeNodes",
-      args: [myNodeAddress],
+    address: config.scytale.address,
+    abi: config.scytale.abi,
+    functionName: "storeNodes",
+    args: [myNodeAddress],
   })
 
   let nodeStake, apiUrl, activeMessages, price;
   if (storeNode) {
-      nodeStake = storeNode[0]
-      apiUrl = storeNode[1]
-      activeMessages = storeNode[2]
-      price = storeNode[3]
+    nodeStake = storeNode[0]
+    apiUrl = storeNode[1]
+    activeMessages = storeNode[2]
+    price = storeNode[3]
   }
 
 
   const getMyNode = async () => {
-
+    try {
       const res = await fetch("http://localhost:8080/getAddress"); //to get local node data if it is working
       if (res.ok) {
-          let json = await res.json();
-          setMyNodeAddress(json);
+        let json = await res.json();
+        setMyNodeAddress(json);
 
+      } else {
+        router.replace("/deploy-node")
       }
+    } catch (e) {
+      router.replace("/deploy-node")
+    }
+
   }
 
   useEffect(() => {
-      getMyNode();
+    getMyNode();
   }, [])
 
 
@@ -77,11 +84,11 @@ const Page = () => {
       <div className="mt-4 ">
         <span className=" font-medium">Address:</span>{" "}
         <span className=" text-sm text-gray-400">{myNodeAddress}</span>
-        <EditButton/>
+        <EditButton />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 mt-10 lg:grid-cols-4 gap-4">
         <TopCard title="Revenue" amount={`${nodeStake ? formatEther(nodeStake - DEFAULT_STAKE) : 0} ETH`} />
-        <TopCard title="Truth Score" amount={`${nodeStake ? Number(nodeStake/DEFAULT_STAKE) * 100 : 0}%`} />
+        <TopCard title="Truth Score" amount={`${nodeStake ? Number(nodeStake / DEFAULT_STAKE) * 100 : 0}%`} />
         <TopCard title="RPC URL" amount={apiUrl ? apiUrl : ""} />
         <TopCard title="Status" amount="Online" />
       </div>
@@ -96,7 +103,7 @@ const Page = () => {
           </div>
         </MiddleCard>
         <MiddleCard title="Active messages" bottom=" ">
-          <div className=" mt-5 mb-5 font-bold text-center text-3xl text-white"> {activeMessages ? formatEther(activeMessages) : 0} </div>
+          <div className=" mt-5 mb-5 font-bold text-center text-3xl text-white">{activeMessages?.toString()}</div>
           <div className="flex justify-center gap-8 mt-10 items-center ">
             {" "}
             <Button> Look all messages</Button>{" "}

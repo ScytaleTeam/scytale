@@ -4,7 +4,7 @@ import config from "../../../config"
 export async function fetchPreviousMessages(provider: any) {
   const contract = new ethers.Contract(config.scytale.address, config.scytale.abi, provider)
   const eventFilter = contract.filters.AcceptedMessage()
-  const logs = await contract.queryFilter(eventFilter)
+  const logs = await contract.queryFilter(eventFilter, provider.blockNumber - 3000, provider.blockNumber)
 
   return logs
 }
@@ -12,7 +12,7 @@ export async function fetchPreviousMessages(provider: any) {
 export async function fetchMyMessages(address: string, provider: any) {
   const contract = new ethers.Contract(config.scytale.address, config.scytale.abi, provider)
   const eventFilter = contract.filters.AcceptedMessage(null, null, address)
-  const logs = await contract.queryFilter(eventFilter)
+  const logs = await contract.queryFilter(eventFilter, provider.blockNumber - 3000, provider.blockNumber)
 
   return logs
 }
