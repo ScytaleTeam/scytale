@@ -46,14 +46,6 @@ const AllMessages = () => {
   const { data: hash, isPending, isSuccess, error, writeContract } = useWriteContract()
 
 
-  let nodeStake, apiUrl, activeMessages, price;
-  if (storeNode) {
-    nodeStake = storeNode[0]
-    apiUrl = storeNode[1]
-    activeMessages = storeNode[2]
-    price = storeNode[3]
-  }
-
   const fetchMessages = async () => {
     const newMessages = await fetchPreviousMessages(provider);
     const finalMsg = []
