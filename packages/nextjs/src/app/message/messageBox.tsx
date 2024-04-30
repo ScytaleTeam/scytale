@@ -6,17 +6,19 @@ import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { fileToBase64 } from "@/lib/utils"
+import NodeList from "./nodeList"
 
 export default function MessageBox() {
   const { publicKey, privateKey, encryptData, decryptData } = useRSAContext()
@@ -27,6 +29,7 @@ export default function MessageBox() {
     message: "",
     to: "",
     attacments: [] as any,
+    messageWillSend: "",
   })
 
   const setAttachments = async (files: any) => {
@@ -46,18 +49,22 @@ export default function MessageBox() {
       message: data.message,
       attachments: data.attacments,
     })
+    try {
+      const encrypted = await encryptData(json, data.to)
+      const willSend = {
+        subject: data.subject,
+        message: encrypted,
+      }
 
-    console.log(json)
-
-    const encrypted = await encryptData(json, data.to)
-    const willSend = {
-      subject: data.subject,
-      message: encrypted,
+      setData({ ...data, messageWillSend: JSON.stringify(willSend) })
+    } catch (e) {
+      setData({ ...data, messageWillSend: "" })
+      toast({
+        title: "Error",
+        description: "Failed to encrypt the message check the recipient public key",
+        variant: "destructive",
+      })
     }
-
-    const decrypted = await decryptData(encrypted)
-
-    console.log(willSend)
   }
 
   return (
@@ -126,15 +133,52 @@ export default function MessageBox() {
           <div></div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button
-            variant="default"
-            onClick={() => {
-              handleSendClicked()
-            }}
-          >
-            Send
-            <PaperAirplaneIcon className="h-4 w-4 ml-4" />
-          </Button>
+          {/* <Dialog open={data.messageWillSend.length > 0}>
+            <DialogTrigger
+              onClick={() => {
+                handleSendClicked()
+              }}
+              className="flex items-center gap-2 bg-white text-black p-2 rounded-md cursor-pointer"
+            >
+              Send
+              <PaperAirplaneIcon className="h-4 w-4" />
+            </DialogTrigger>
+            <DialogContent className="w-full">
+              <DialogHeader>
+                <DialogTitle>Select a Node</DialogTitle>
+                <DialogDescription>
+                  <NodeList />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </CardFooter> */}
+          <Sheet open={data.messageWillSend.length > 0}>
+            <SheetTrigger>
+              <Button
+                onClick={() => {
+                  handleSendClicked()
+                }}
+                className="flex items-center gap-2"
+              >
+                Send
+                <PaperAirplaneIcon className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="overflow-scroll">
+              <SheetHeader>
+                <SheetTitle>Select a node</SheetTitle>
+                <SheetDescription className="flex flex-col gap-4">
+                  <NodeList />
+                </SheetDescription>
+              </SheetHeader>
+              <SheetFooter>
+                <Button>
+                  <SheetClose>Send</SheetClose>
+                </Button>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </CardFooter>
       </Card>
       <div className=""></div>

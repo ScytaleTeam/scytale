@@ -19,7 +19,7 @@ export default function NodeList({
   useEffect(() => {
     try {
       fetchNodes(provider).then(nodes => {
-        setNodes(nodes)
+        setNodes(nodes && nodes)
       })
     } catch (err) {
       console.log(err)
