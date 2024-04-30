@@ -83,6 +83,7 @@ export const PublicKey: React.FunctionComponent<PublicKeyProps> = ({ address, pe
   const account = useAccount()
 
   const { data: hash, isPending, isSuccess, error, writeContract } = useWriteContract()
+
   const { data: rsaKey, isFetched } = useReadContract({
     address: config.scytale.address,
     abi: config.scytale.abi,
@@ -160,7 +161,7 @@ export const PublicKey: React.FunctionComponent<PublicKeyProps> = ({ address, pe
       <Button
         variant="ghost"
         onClick={() => {
-          navigator.clipboard.writeText(address)
+          navigator.clipboard.writeText(pemAddress)
           toast({
             title: "📋 Copied the full address to clipboard",
             description: pemAddress,

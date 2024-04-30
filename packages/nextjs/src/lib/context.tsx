@@ -15,7 +15,7 @@ interface RSAContext {
   publicKey: string
   privateKey: string
   keyPair: CryptoKeyPair | null
-  encryptData: (data: string, publicKey: CryptoKey) => Promise<string>
+  encryptData: (data: string, publicKey: string) => Promise<string>
   decryptData: (data: string) => Promise<string>
 }
 
@@ -65,34 +65,49 @@ export const RSAContextProvider = ({ children }: { children: React.ReactNode }) 
     setKeys({ publicKey, privateKey })
   }
 
-  const encryptData = async (data: string, publicKey: CryptoKey) => {
-    //const key = await importPublicKey(recieverPublicKey)
+  const encryptData = async (data: string, publicKey: string) => {
+    const key = await importPublicKey(publicKey)
 
-    const encryptedData = await window.crypto.subtle.encrypt(
-      {
-        name: "RSA-OAEP",
-      },
-      publicKey,
-      new TextEncoder().encode(data),
-    )
-    const encryptedDataAsString = arrayBufToString(encryptedData)
-    return window.btoa(encryptedDataAsString)
+    const encoder = new TextEncoder()
+    const encryptedList = []
+
+    for (let i = 0; i < data.length; i += 100) {
+      const encryptedData = await window.crypto.subtle.encrypt(
+        {
+          name: "RSA-OAEP",
+        },
+        key,
+        encoder.encode(data.slice(i, i + 100)),
+      )
+      encryptedList.push(encryptedData)
+    }
+    const encrypted = window.btoa(JSON.stringify(encryptedList.map(data => arrayBufToString(data))))
+    console.log(JSON.stringify(encryptedList.map(data => arrayBufToString(data))))
+
+    return encrypted
   }
 
   const decryptData = async (data: string) => {
     if (!keyPair) throw new Error("Key pair not found")
+    let decryptedData = ""
     const key = keyPair.privateKey
     const decodedData = window.atob(data)
-    const arrayBuffer = str2ab(decodedData)
-    const decryptedData = await window.crypto.subtle.decrypt(
-      {
-        name: "RSA-OAEP",
-      },
-      key,
-      arrayBuffer,
-    )
-    const decryptedDataAsString = arrayBufToString(decryptedData)
-    return decryptedDataAsString
+    const json = JSON.parse(decodedData)
+    json.map((data: string) => str2ab(data))
+
+    for (let i = 0; i < json.length; i++) {
+      const data = json[i]
+      const decrypted = await window.crypto.subtle.decrypt(
+        {
+          name: "RSA-OAEP",
+        },
+        key,
+        str2ab(data),
+      )
+      decryptedData += arrayBufToString(decrypted)
+    }
+
+    return decryptedData
   }
 
   return (
