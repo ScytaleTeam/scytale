@@ -33,7 +33,7 @@ Everything done so far is based on the most optimistic scenario, but Scytale att
 
 - When users sending messages in the sender layer upload a file, no one except the receiver should be able to read this file. We used the RSA encryption algorithm to ensure confidentiality here.
 
-- As we mentioned above, since our aim is to develop a decentralized protocol, we have developed an incentive mechanism for people who install storage nodes to ensure that everyone can install a storage node and to ensure decentralization. 
+- As we mentioned above, since our aim is to develop a decentralized protocol, we have developed an incentive mechanism for people who install storage nodes to ensure that everyone can install a storage node and to ensure decentralization. Incentivization is the most important difference between other peer to peer communication protocols, and it ensures a sustainable economical model for the Scytale protocol. 
 This incentive mechanism is based on the fact that the nodes that perform this data storage earn money in amounts determined by the sender per certain byte and time.
 
 - We need to know whether storage nodes hold data and this needs to be audited. Here, we have created a structure where storage nodes can be penalized if they do not hold data. 
@@ -43,12 +43,12 @@ In this challenge, nodes in the consensus mechanism layer are randomly selected,
 some of the staked tokens are deducted as a penalty. Also, if the challenge is successful challenger will be rewarded, too.
 
 ## Contracts
-
-- [**MockVRF**] --> (https://sepolia.scrollscan.com/address/0x15683C0Ee54416d8ba84F7226bd8ca5F015c14b9)
   
 - [**ScyTale**] --> ([https://sepolia.scrollscan.com/address/0x0aF36aEef5E696701B85185CEDC534538008990F#code])
   
 - [**AlertVerifier**] --> ([https://sepolia.scrollscan.com/address/0xC3e5C369AD47495a82925F762912703DC65Cd60B#code])
+  
+- [**MockVRF**] --> (https://sepolia.scrollscan.com/address/0x15683C0Ee54416d8ba84F7226bd8ca5F015c14b9)
 
 ## Diagram
 
