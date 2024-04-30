@@ -54,16 +54,14 @@ export const NavigationItems = [
 
 const NavMenuDesktop = ({ publicKey }: { publicKey: string }) => {
   return (
-    <div className="flex-row md:gap-4 items-start justify-end md:flex hidden">
-      <Logo className="w-24 h-6 top-1 md:block hidden" />
+    <div className="flex-row md:gap-4 items-center justify-end md:flex hidden">
+      <Logo className="w-40 h-16 top-1 md:block hidden" />
       <NavigationMenu>
         <NavigationMenuList>
           {NavigationItems.map(item => (
             <NavigationMenuItem key={item.title}>
               <Link href={item.href} legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={cn(navigationMenuTriggerStyle(), "text-md text-gray-400 bg-black tracking-widest")}
-                >
+                <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-md text-gray-400 bg-black")}>
                   {item.icon}
                   <span>{item.title}</span>
                 </NavigationMenuLink>
@@ -81,7 +79,7 @@ const NavMenuMobile = ({ publicKey }: { publicKey: string }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   return (
     <div className="md:hidden">
-      <div className="flex md:hidden flex-row gap-2">
+      <div className="flex md:hidden flex-row gap-2 items-center justify-center">
         <button
           onClick={() => {
             setIsMenuOpen(!isMenuOpen)
@@ -90,7 +88,7 @@ const NavMenuMobile = ({ publicKey }: { publicKey: string }) => {
         >
           {isMenuOpen ? <XMarkIcon className="w-8 h-8" /> : <Bars3Icon className="text-white w-8 h-8" />}
         </button>
-        <Logo className="w-24 h-6 top-1" />
+        <Logo className="w-36 h-16" />
       </div>
       <div className="relative h-0 top-4 -left-3">
         {isMenuOpen && (
@@ -130,7 +128,6 @@ export default function Header() {
         <NavMenuDesktop publicKey={publicKey} />
         <NavMenuMobile publicKey={publicKey} />
         <div className="flex gap-4 flex-row-reverse items-center justify-center">
-          <NodeSheet nodes={[]} />
           <ConnectButton
             accountStatus={{
               smallScreen: "avatar",
