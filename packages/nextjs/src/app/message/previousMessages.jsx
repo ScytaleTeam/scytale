@@ -99,13 +99,9 @@ const MessageCard = ({ msg }) => {
                 <div className="flex gap-6">
                   {decryptedMessage.attachments.map((attachment, index) => {
                     return (
-                      <a
-                        key={index}
-                        href={attachment}
-                        className="flex items-center justify-center gap-2 rounded-md text-white/50 hover:text-white"
-                      >
-                        File {index + 1}
-                        <Button className="p-1 h-6" variant="ghost">
+                      <a key={index} href={attachment} className="flex rounded-md bg-white text-black">
+                        <Button className="p-1 h-6 flex gap-2 items-center justify-center ">
+                          File{index + 1}
                           <ArrowDownOnSquareIcon className="h-4 w-4" />
                         </Button>
                       </a>

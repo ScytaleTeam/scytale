@@ -82,7 +82,6 @@ export const RSAContextProvider = ({ children }: { children: React.ReactNode }) 
       encryptedList.push(encryptedData)
     }
     const encrypted = window.btoa(JSON.stringify(encryptedList.map(data => arrayBufToString(data))))
-    console.log(JSON.stringify(encryptedList.map(data => arrayBufToString(data))))
 
     return encrypted
   }
