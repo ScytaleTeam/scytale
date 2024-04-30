@@ -42,6 +42,13 @@ If the storage node stops keeping this data, anyone can detect that the data doe
 In this challenge, nodes in the consensus mechanism layer are randomly selected, and if the majority decides that the data is not kept, 
 some of the staked tokens are deducted as a penalty. Also, if the challenge is successful challenger will be rewarded, too.
 
+## Contracts
+
+- [**MockVRF**]([https://sepolia.scrollscan.com/address/0x15683C0Ee54416d8ba84F7226bd8ca5F015c14b9])
+- 
+- [**ScyTale**]([https://sepolia.scrollscan.com/address/0x0aF36aEef5E696701B85185CEDC534538008990F#code])
+- 
+- [**AlertVerifier**]([https://sepolia.scrollscan.com/address/0xC3e5C369AD47495a82925F762912703DC65Cd60B#code])
 
 
 
