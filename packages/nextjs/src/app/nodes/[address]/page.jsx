@@ -1,11 +1,9 @@
 "use client"
 
 import React from "react"
-import TopCard from "./components/topcard"
+import TopCard from "../../node-fe/components/topcard"
 import { Button } from "@/components/ui/button"
-import MiddleCard from "./components/middlecard"
-import EditButton from "./components/EditButton"
-
+import MiddleCard from "../../node-fe/components/middlecard"
 
 
 import { CopyIcon } from "@radix-ui/react-icons"
@@ -23,7 +21,7 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useAccount, useWriteContract, useReadContract } from "wagmi"
 import { useEffect, useState } from "react"
-import config from "../../../config";
+import config from "../../../../config";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -32,17 +30,17 @@ import { DialogClose } from "@radix-ui/react-dialog";
 
 const DEFAULT_STAKE = parseEther("0.1");
 
-const Page = () => {
+const NodePage = ({params}) => {
 
-  const [myNodeAddress, setMyNodeAddress] = useState();
+  const address = params.address;
 
-
+  const { toast } = useToast()
 
   const { data: storeNode, isFetched: isFetchedNode, error: nodeErr } = useReadContract({
       address: config.scytale.address,
       abi: config.scytale.abi,
       functionName: "storeNodes",
-      args: [myNodeAddress],
+      args: [address],
   })
 
   let nodeStake, apiUrl, activeMessages, price;
@@ -54,30 +52,16 @@ const Page = () => {
   }
 
 
-  const getMyNode = async () => {
-
-      const res = await fetch("http://localhost:8080/getAddress"); //to get local node data if it is working
-      if (res.ok) {
-          let json = await res.json();
-          setMyNodeAddress(json);
-
-      }
-  }
-
-  useEffect(() => {
-      getMyNode();
-  }, [])
 
 
 
   return (
     <div className="container mx-auto justify-center items-center mt-20 px-4">
-      <div className="text-xl font-bold text-white mt-8 ">My Node</div>
+      <div className="text-xl font-bold text-white mt-8 ">Node</div>
 
       <div className="mt-4 ">
         <span className=" font-medium">Address:</span>{" "}
-        <span className=" text-sm text-gray-400">{myNodeAddress}</span>
-        <EditButton/>
+        <span className=" text-sm text-gray-400">{address}</span>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 mt-10 lg:grid-cols-4 gap-4">
         <TopCard title="Revenue" amount={`${nodeStake ? formatEther(nodeStake - DEFAULT_STAKE) : 0} ETH`} />
@@ -113,4 +97,4 @@ const Page = () => {
   )
 }
 
-export default Page
+export default NodePage
