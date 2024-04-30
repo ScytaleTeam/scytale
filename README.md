@@ -50,5 +50,9 @@ some of the staked tokens are deducted as a penalty. Also, if the challenge is s
   
 - [**AlertVerifier**] --> ([https://sepolia.scrollscan.com/address/0xC3e5C369AD47495a82925F762912703DC65Cd60B#code])
 
+## Diagram
+
+![ScytaleDiagram](https://github.com/ScytaleTeam/scytale/blob/main/scytale-diagram.png)
+
 
 
