@@ -31,12 +31,12 @@ Because Scytale protocol uses end to end encryption with RSA public key, that en
 Everything done so far is based on the most optimistic scenario, but Scytale attaches importance to four basic things: Security, Incentivization, Permissionless, Decentralized.
 
 
--When users sending messages in the sender layer upload a file, no one except the receiver should be able to read this file. We used the RSA encryption algorithm to ensure confidentiality here.
+- When users sending messages in the sender layer upload a file, no one except the receiver should be able to read this file. We used the RSA encryption algorithm to ensure confidentiality here.
 
--As we mentioned above, since our aim is to develop a decentralized protocol, we have developed an incentive mechanism for people who install storage nodes to ensure that everyone can install a storage node and to ensure decentralization. 
+- As we mentioned above, since our aim is to develop a decentralized protocol, we have developed an incentive mechanism for people who install storage nodes to ensure that everyone can install a storage node and to ensure decentralization. 
 This incentive mechanism is based on the fact that the nodes that perform this data storage earn money in amounts determined by the sender per certain byte and time.
 
--We need to know whether storage nodes hold data and this needs to be audited. Here, we have created a structure where storage nodes can be penalized if they do not hold data. 
+- We need to know whether storage nodes hold data and this needs to be audited. Here, we have created a structure where storage nodes can be penalized if they do not hold data. 
 This mechanism works as follows: Someone who wants to become a storage node must first stake a certain amount of ETH (this can be a token in the future). 
 If the storage node stops keeping this data, anyone can detect that the data does not exist and a challenge is initiated. 
 In this challenge, nodes in the consensus mechanism layer are randomly selected, and if the majority decides that the data is not kept, 
