@@ -19,7 +19,7 @@ const MiddleCard: React.FC<MiddleCardProps> = ({ title, bottom,children}) => {
         <div className="">
             <Card>
                 <CardHeader>
-                    <CardTitle>{title}</CardTitle>
+                    <CardTitle className=" flex justify-between">{title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                 {children}
