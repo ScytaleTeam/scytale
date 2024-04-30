@@ -45,7 +45,11 @@ export const NavigationItems = [
     icon: null,
     href: "/node-fe",
   },
-
+  {
+    title: "Node Message",
+    icon: null,
+    href: "/node-message",
+  },
 ]
 
 const NavMenuDesktop = ({ publicKey }: { publicKey: string }) => {

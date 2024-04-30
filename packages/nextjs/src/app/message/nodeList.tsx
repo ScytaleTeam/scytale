@@ -4,13 +4,14 @@ import { useEffect, useState } from "react"
 import { ethers } from "ethers"
 import NodeCard from "./nodeCard"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 export default function NodeList({
   selectedNode,
   setSelectedNode,
 }: {
-  selectedNode?: string
-  setSelectedNode?: (node: string) => void
+  selectedNode?: { address: string; url: string; price: Number }
+  setSelectedNode?: (node: { address: string; url: string; price: Number }) => void
 }) {
   const provider = ethers.getDefaultProvider("https://scroll-public.scroll-testnet.quiknode.pro/")
 
@@ -29,9 +30,12 @@ export default function NodeList({
   return (
     <>
       {nodes.map((node: string, i) => (
-        <Button className="w-fit h-full p-2" variant="ghost" key={i}>
-          <NodeCard address={node} id={i} />
-        </Button>
+        <NodeCard
+          address={node}
+          id={i}
+          setSelectedNode={setSelectedNode}
+          isSelected={selectedNode && selectedNode.address === node}
+        />
       ))}
     </>
   )

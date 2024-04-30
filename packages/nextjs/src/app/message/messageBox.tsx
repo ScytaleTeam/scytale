@@ -19,11 +19,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { fileToBase64 } from "@/lib/utils"
 import NodeList from "./nodeList"
+import { useWriteContract } from "wagmi"
+import config from "../../../config"
+import { BigNumber } from "ethers"
 
 export default function MessageBox() {
-  const { publicKey, privateKey, encryptData, decryptData } = useRSAContext()
+  const { encryptData } = useRSAContext()
   const { toast } = useToast()
 
+  const [isOpenNodeSelection, setIsOpenNodeSelection] = useState(false)
+  const [selectedNode, setSelectedNode] = useState<{ address: string; url: string; price: Number }>("" as any)
   const [data, setData] = useState({
     subject: "",
     message: "",
@@ -31,6 +36,8 @@ export default function MessageBox() {
     attacments: [] as any,
     messageWillSend: "",
   })
+
+  const { data: hash, error, isSuccess, writeContract } = useWriteContract()
 
   const setAttachments = async (files: any) => {
     const attachments = []
@@ -62,6 +69,69 @@ export default function MessageBox() {
       toast({
         title: "Error",
         description: "Failed to encrypt the message check the recipient public key",
+        variant: "destructive",
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: "🎉 Message sent",
+        description: "Your message has been successfully sent",
+      })
+      setData({
+        subject: "",
+        message: "",
+        to: "",
+        attacments: [],
+        messageWillSend: "",
+      })
+      setSelectedNode({ address: "", url: "", price: 0 } as any)
+    }
+    if (error) {
+      toast({
+        title: "❌ Error",
+        description: error.message,
+        variant: "destructive",
+      })
+    }
+  }, [isSuccess, error])
+
+  const handleSendData = async () => {
+    const node = selectedNode
+    if (!node) {
+      toast({
+        title: "Error",
+        description: "Please select a node to send the message",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const { address, url } = node
+    const message = data.messageWillSend
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ address, message }),
+    })
+
+    if (res.status === 200) {
+      const hash = (await res.json()).messageHash
+      writeContract({
+        address: config.scytale.address,
+        abi: config.scytale.abi,
+        functionName: "broadcastMessage",
+        args: [data.to, `0x${hash}`, selectedNode.address, 100000],
+        value: selectedNode.price as unknown as bigint,
+      })
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to send the message",
         variant: "destructive",
       })
     }
@@ -133,31 +203,17 @@ export default function MessageBox() {
           <div></div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          {/* <Dialog open={data.messageWillSend.length > 0}>
-            <DialogTrigger
-              onClick={() => {
-                handleSendClicked()
-              }}
-              className="flex items-center gap-2 bg-white text-black p-2 rounded-md cursor-pointer"
-            >
-              Send
-              <PaperAirplaneIcon className="h-4 w-4" />
-            </DialogTrigger>
-            <DialogContent className="w-full">
-              <DialogHeader>
-                <DialogTitle>Select a Node</DialogTitle>
-                <DialogDescription>
-                  <NodeList />
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </CardFooter> */}
-          <Sheet open={data.messageWillSend.length > 0}>
+          <Sheet
+            open={data.messageWillSend.length > 0 && isOpenNodeSelection}
+            onOpenChange={val => {
+              setIsOpenNodeSelection(val)
+            }}
+          >
             <SheetTrigger>
               <Button
                 onClick={() => {
                   handleSendClicked()
+                  setIsOpenNodeSelection(true)
                 }}
                 className="flex items-center gap-2"
               >
@@ -169,11 +225,17 @@ export default function MessageBox() {
               <SheetHeader>
                 <SheetTitle>Select a node</SheetTitle>
                 <SheetDescription className="flex flex-col gap-4">
-                  <NodeList />
+                  <NodeList selectedNode={selectedNode} setSelectedNode={setSelectedNode} />
                 </SheetDescription>
               </SheetHeader>
               <SheetFooter>
-                <Button>
+                <Button
+                  className="w-full mt-8"
+                  onClick={() => {
+                    setIsOpenNodeSelection(false)
+                    handleSendData()
+                  }}
+                >
                   <SheetClose>Send</SheetClose>
                 </Button>
               </SheetFooter>
