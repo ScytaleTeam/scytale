@@ -31,6 +31,7 @@ export default function NodeList({
     <>
       {nodes.map((node: string, i) => (
         <NodeCard
+          key={i}
           address={node}
           id={i}
           setSelectedNode={setSelectedNode}

@@ -43,6 +43,7 @@ export default function PreviousMessages() {
         {messages.map((msg, index) => {
           return (
             <MessageCard
+              key={index}
               msg={{
                 sender: msg.senderAddress,
                 url: msg.dataUrl,
